@@ -37,21 +37,28 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 " Load the plugins.
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " RipGrep support via Rg command
 Plug 'jremmen/vim-ripgrep'
 
+map <leader>g :Rg 
+
 " Ctrl+P to find files
 Plug 'kien/ctrlp.vim'
 
-" Airline and other prettification
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Prettification
+Plug 'itchyny/lightline.vim'
 Plug 'flazz/vim-colorschemes'
+
+set laststatus=2
+set noshowmode
 
 " Show VCS status in the gutter
 Plug 'mhinz/vim-signify'
+
+map <leader>s :SignifyToggle<CR>
+map <leader>S :SignifyRefresh<CR>
 
 " Comment management
 Plug 'tpope/vim-commentary'
@@ -62,6 +69,10 @@ Plug 'ervandew/supertab'
 " Async linting
 Plug 'dense-analysis/ale'
 
+let g:ale_sign_error = '!'
+let g:ale_sign_warning = '?'
+let g:ale_echo_msg_format = '[%linter%] %s'
+
 " Snipmate -- snippet expansion via Tab
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -71,13 +82,12 @@ Plug 'garbas/vim-snipmate'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'francoiscabrol/ranger.vim'
 
+let g:ranger_replace_netrw = 1
+
+" End of plugins
 call plug#end()
 
-" Airline config
-let g:airline_powerline_fonts = 1
-set laststatus=2
-
-" Color scheme:
+" Set color scheme (can't be done before plugins load)
 colorscheme jellybeans
 
 """ General handy key bindings
@@ -85,12 +95,6 @@ colorscheme jellybeans
 map Q gq
 " \\ to open parent directory of current file
 map <leader>\ :e %:h<CR>
-" \g to ripgrep search for ... (space at the end of next line is significant)
-map <leader>g :Rg 
-
-" Signify key bindings
-map <leader>s :SignifyToggle<CR>
-map <leader>S :SignifyRefresh<CR>
 
 """ Bindings for running terminals
 " Exit from insert mode in the terminal window.
@@ -107,11 +111,6 @@ command! TW4 setlocal sw=4 sts=4 et
 command! TW2 setlocal sw=2 sts=2 et
 command! TT8 setlocal sw=8 sts=8 noet
 command! TT4 setlocal sw=4 sts=4 noet
-
-" ALE configuration
-let g:ale_sign_error = '!'
-let g:ale_sign_warning = '?'
-let g:ale_echo_msg_format = '[%linter%] %s'
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
