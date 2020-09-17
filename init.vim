@@ -44,8 +44,14 @@ Plug 'jremmen/vim-ripgrep'
 
 map <leader>g :Rg 
 
-" Ctrl+P to find files
-Plug 'kien/ctrlp.vim'
+" Ctrl+P to find files and Ctrl+B to find buffers
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+let g:fzf_command_prefix = 'F'
+map <C-p> :FFiles<CR>
+map <C-b> :FBuffers<CR>
+map <C-h> :FHistory<CR>
 
 " Prettification
 Plug 'itchyny/lightline.vim'
@@ -111,6 +117,8 @@ command! TW4 setlocal sw=4 sts=4 et
 command! TW2 setlocal sw=2 sts=2 et
 command! TT8 setlocal sw=8 sts=8 noet
 command! TT4 setlocal sw=4 sts=4 noet
+
+au FileType markdown TW2
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
