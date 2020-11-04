@@ -39,17 +39,17 @@ endif
 " Load the plugins.
 call plug#begin('~/.config/nvim/plugged')
 
-" RipGrep support via Rg command
+" RipGrep support via Rg command (
 Plug 'jremmen/vim-ripgrep'
 
-map <leader>g :Rg 
+map <leader>g :FRg 
 
 " Ctrl+P to find files and Ctrl+B to find buffers
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_command_prefix = 'F'
-map <C-p> :FFiles<CR>
+map <C-p> :FGFiles<CR>
 map <C-b> :FBuffers<CR>
 map <C-h> :FHistory<CR>
 
@@ -83,12 +83,6 @@ let g:ale_echo_msg_format = '[%linter%] %s'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
-
-" Ranger FS manager
-Plug 'rbgrouleff/bclose.vim'
-Plug 'francoiscabrol/ranger.vim'
-
-let g:ranger_replace_netrw = 1
 
 " End of plugins
 call plug#end()
@@ -129,3 +123,24 @@ autocmd BufReadPost *
 \ if line("'\"") > 1 && line("'\"") <= line("$") |
 \   exe "normal! g`\"" |
 \ endif
+
+""" Running files via \R and \r
+let g:run_cmd = 'vimrun'
+
+" command and function to run files via vimrun or other command
+command! -complete=file -nargs=? Run call Run(<q-args>)
+function! Run(...)
+  if a:0 > 0 && a:1 != ''
+    let g:run_target=a:1
+  endif
+  if exists('g:run_target')
+    wa
+    execute 'sp term://' . g:run_cmd . ' ' . g:run_target
+  else
+    Run %:p
+  endif
+endfunction
+
+" key bindings to run current file and last file
+map <leader>R :wa<CR>:Run %:p<CR>
+map <leader>r :wa<CR>:Run<CR>
